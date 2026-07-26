@@ -1,3 +1,5 @@
+# WARNING: Don't use this, it is unmaintained, someone probably did a better job with this
+
 # luanti_lsp_definitions 0.0.1
 ## State: Will have mistakes, report them, will have breaking changes 
 
