@@ -17,7 +17,6 @@
 
 ---@class ItemStack
 ---@class InvRef
----@class PlayerMetaRef
 
 -- =======================================================================
 -- ObjectRef Class
