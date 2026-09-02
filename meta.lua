@@ -50,13 +50,13 @@ function core.get_mod_storage() end
 --- Inheritance is so nice
 
 ---@class NodeMetaRef: MetaDataRef
----@field get_inventory fun():InvRef
+---@field get_inventory fun(): InvRef
 -- * `mark_as_private(name or {name1, name2, ...})`: Mark specific vars as private
 --   This will prevent them from being sent to the client. Note that the "private"
 --   status will only be remembered if an associated key-value pair exists,
 --   meaning it's best to call this when initializing all other meta (e.g.
 --   `on_construct`).
----@field mark_as_private fun(fields:string|string[])
+---@field mark_as_private fun(fields: string|string[])
 
 ---@type Settings
 core.settings = core.settings

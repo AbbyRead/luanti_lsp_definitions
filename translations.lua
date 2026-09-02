@@ -1,4 +1,5 @@
 ---@meta
+
 ---@alias textdomain string
 
 --[[
