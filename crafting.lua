@@ -14,7 +14,7 @@ function core.register_craft(craft_recipe) end
 --- this is impressive
 
 ---@class CraftRecipe
----@field type "shaped"|"shapeless"|"toolrepair"|"cooking"|"fuel"
+---@field type? "shaped"|"shapeless"|"toolrepair"|"cooking"|"fuel"
 ---@field output? ItemStackAny
 ---@field recipe? ItemStackAny[][]|ItemStackAny[]
 -- * `replacements`: (optional) Allows you to replace input items with some other items

@@ -66,7 +66,7 @@
 -- * item table values are ItemStacks
 ---@class InvTable: table<string, InvList>
 
----@alias ItemStackAny ItemStack|string|table
+---@alias ItemStackAny ItemStack|string|table|nil
 
 ---@class ItemStackMetaRef: MetaDataRef
 ---@field set_tool_capabilities fun(self,tool_capabilities:tool_capabilities?)
