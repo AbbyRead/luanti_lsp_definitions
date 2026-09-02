@@ -20,7 +20,7 @@ the color name (e.g. `colorname#08`).
 ]]
 -- Unofficial note: sorry they need to be aliases
 ---@alias ColorString string
----@alias ColorSpec table|number|integer|string|any
+---@alias ColorSpec table|number|integer|string
 
 ---@class content_id: integer
 
