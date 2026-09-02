@@ -867,6 +867,49 @@ function core.show_death_screen(player, reason) end
 ---@return string
 function core.inventorycube(img1, img2, img3) end
 
+---@meta
+
+-- Define placeholder classes for Minetest objects
+---@class InvRef
+---@class ItemStack
+---@class ObjectRef
+---@class PointedThing
+
+-- Define specific location tables using literal types for their 'type' fields
+---@class InventoryLocationPlayer
+---@field type '"player"'
+---@field name string
+
+---@class InventoryLocationNode
+---@field type '"node"'
+---@field pos {x: number, y: number, z: number}
+
+---@class InventoryLocationDetached
+---@field type '"detached"'
+---@field name string
+
+-- Create an alias that acts as a union of all possible location structures
+---@alias InventoryLocation InventoryLocationPlayer | InventoryLocationNode | InventoryLocationDetached
+
+core = {}
+
+---Returns an InvRef for the given location.
+---@param location InventoryLocation
+---@return InvRef
+function core.get_inventory(location) end
+
+---Creates a detached inventory. If it already exists, it is cleared.
+---@param name string
+---@param callbacks table See Detached inventory callbacks
+---@param player_name? string Make detached inventory available to one player exclusively, by default they will be sent to every player (even if not used). Note that this parameter is mostly just a workaround and will be removed in future releases.
+---@return InvRef
+function core.create_detached_inventory(name, callbacks, player_name) end
+
+---Removes a detached inventory.
+---@param name string
+---@return boolean success Indicating whether the removal succeeded.
+function core.remove_detached_inventory(name) end
+
 ---See `core.item_eat` and `core.register_on_item_eat`
 ---@param hp_change integer
 ---@param replace_with_item string|nil

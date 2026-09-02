@@ -39,7 +39,7 @@
 ---@field set_float fun(key:string, value:number)
 ---@field get_float fun(key:string):number
 ---@field get_keys fun():string[]
----@field to_table fun():{fields:table<string, string>,inventory:InvTable}
+---@field to_table fun():{fields:table<string, string>, inventory?:InvTable}?
 
 -- * `core.get_mod_storage()`:
 --     * returns reference to mod private `StorageRef`
