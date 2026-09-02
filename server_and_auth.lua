@@ -14,6 +14,13 @@ function core.request_shutdown(message, reconnect, delay) end
 -- * `core.cancel_shutdown_requests()`: cancel current delayed shutdown
 function core.cancel_shutdown_requests() end
 
+-- * `core.get_player_privs(name)`: returns a table of privileges for the specified player
+--     * Returns a table with privilege names as keys and boolean values indicating
+--       whether the player has that privilege
+---@param name string
+---@return { [string]: boolean }
+function core.get_player_privs(name) end
+
 -- Unofficial note: This is really cool i didn't know this
 -- * `core.get_server_status(name, joined)`
 --     * Returns the server status string when a player joins or when the command
