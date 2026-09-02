@@ -244,8 +244,8 @@ function core.register_craft_predict(f) end
 
 ---@class inventory_info: table
 ---@field move {from_list:string, to_list:string, from_index:number, to_index:number, count:number}?
----@field put {listname:string, index:string, stack:ItemStack}
----@field take {listname:string, index:string, stack:ItemStack}
+---@field put {listname:string, index:integer, stack:ItemStack}
+---@field take {listname:string, index:integer, stack:ItemStack}
 
 -- * `core.register_allow_player_inventory_action(function(player, action, inventory, inventory_info))`
 --     * Determines how much of a stack may be taken, put or moved to a
