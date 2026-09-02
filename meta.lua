@@ -67,16 +67,59 @@ function core.get_mod_storage() end
 ---@field mark_as_private fun(fields: string|string[])
 
 ---@class Settings
----@field get fun(key: string): string?
----@field get_bool fun(key: string, fundefault?: boolean): boolean
----@field get_flags fun(key: string): table<string, boolean>
----@field get_names fun(): string[]
----@field get_np_group fun(key: string): NoiseParams
----@field get_pos fun(key: string): vector?
----@field has fun(key: string): boolean
----@field remove fun(key: string): boolean
----@field set fun(key: string, value: string)
----@field set_bool fun(key: string, value: boolean)
+-- * `get(key)`: returns a value
+--     * Returns `nil` if `key` is not found.
+---@field get fun(self: Settings, key: string): any?
+-- * `get_bool(key, [default])`: returns a boolean
+--     * `default` is the value returned if `key` is not found.
+--     * Returns `nil` if `key` is not found and `default` not specified.
+---@field get_bool fun(self: Settings, key: string, fundefault?: boolean): boolean?
+-- * `get_np_group(key)`: returns a NoiseParams table
+--     * Returns `nil` if `key` is not found.
+---@field get_np_group fun(self: Settings, key: string): NoiseParams?
+-- * `get_flags(key)`:
+--     * Returns `{flag = true/false, ...}` according to the set flags.
+--     * Is currently limited to mapgen flags `mg_flags` and mapgen-specific
+--       flags like `mgv5_spflags`.
+--     * Returns `nil` if `key` is not found.
+---@field get_flags fun(self: Settings, key: string): table<string, boolean>?
+-- * `get_pos(key)`:
+--     * Returns a `vector`
+--     * Returns `nil` if no value is found or parsing failed.
+---@field get_pos fun(self: Settings, key: string): vector?
+-- * `set(key, value)`
+--     * Setting names can't contain whitespace or any of `="{}#`.
+--     * Setting values can't contain the sequence `\n"""`.
+--     * Setting names starting with "secure." can't be set on the main settings
+--       object (`core.settings`).
+---@field set fun(self: Settings, key: string, value: any)
+-- * `set_bool(key, value)`
+--     * See documentation for `set()` above.
+---@field set_bool fun(self: Settings, key: string, value: boolean)
+-- * `set_np_group(key, value)`
+--     * `value` is a NoiseParams table.
+--     * Also, see documentation for `set()` above.
+---@field set_np_group fun(self: Settings, key: string, value: NoiseParams)
+-- * `set_pos(key, value)`
+--     * `value` is a `vector`.
+--     * Also, see documentation for `set()` above.
+---@field set_pos fun(self: Settings, key: string, value: vector)
+-- * `remove(key)`: returns a boolean (`true` for success)
+---@field remove fun(self: Settings, key: string): boolean
+-- * `get_names()`: returns `{key1,...}`
+---@field get_names fun(self: Settings): string[]
+-- * `has(key)`:
+--     * Returns a boolean indicating whether `key` exists.
+--     * In contrast to the various getter functions, `has()` doesn't consider
+--       any default values.
+--     * This means that on the main settings object (`core.settings`),
+--       `get(key)` might return a value even if `has(key)` returns `false`.
+---@field has fun(self: Settings, key: string): boolean
+-- * `write()`: returns a boolean (`true` for success)
+--     * Writes changes to file.
+---@field write fun(self: Settings): boolean
+-- * `to_table()`: returns `{[key1]=value1,...}`
+---@field to_table fun(self: Settings): table<string, string>
 
 ---@type Settings
 core.settings = core.settings
@@ -90,57 +133,3 @@ core.settings = core.settings
 --     Multiline
 --     value
 --     """
----@class Settings
--- * `get(key)`: returns a value
---     * Returns `nil` if `key` is not found.
----@field get fun(key:string):any
--- * `get_bool(key, [default])`: returns a boolean
---     * `default` is the value returned if `key` is not found.
---     * Returns `nil` if `key` is not found and `default` not specified.
----@field get_bool fun(key:string, fundefault:any):any?
--- * `get_np_group(key)`: returns a NoiseParams table
---     * Returns `nil` if `key` is not found.
----@field get_np_group fun(key:string):NoiseParams
--- * `get_flags(key)`:
---     * Returns `{flag = true/false, ...}` according to the set flags.
---     * Is currently limited to mapgen flags `mg_flags` and mapgen-specific
---       flags like `mgv5_spflags`.
---     * Returns `nil` if `key` is not found.
----@field get_flags fun(key: string):table<string, boolean>
--- * `get_pos(key)`:
---     * Returns a `vector`
---     * Returns `nil` if no value is found or parsing failed.
----@field get_pos fun(key:string):vector?
--- * `set(key, value)`
---     * Setting names can't contain whitespace or any of `="{}#`.
---     * Setting values can't contain the sequence `\n"""`.
---     * Setting names starting with "secure." can't be set on the main settings
---       object (`core.settings`).
----@field set fun(key:string, value:any)
--- * `set_bool(key, value)`
---     * See documentation for `set()` above.
----@field set_bool fun(key:string, value:boolean)
--- * `set_np_group(key, value)`
---     * `value` is a NoiseParams table.
---     * Also, see documentation for `set()` above.
----@field set_np_group fun(key:string, value:NoiseParams)
--- * `set_pos(key, value)`
---     * `value` is a `vector`.
---     * Also, see documentation for `set()` above.
----@field set_pos fun(key:string, value:vector)
--- * `remove(key)`: returns a boolean (`true` for success)
----@field remove fun(key:boolean):boolean
--- * `get_names()`: returns `{key1,...}`
----@field get_names fun():string[]
--- * `has(key)`:
---     * Returns a boolean indicating whether `key` exists.
---     * In contrast to the various getter functions, `has()` doesn't consider
---       any default values.
---     * This means that on the main settings object (`core.settings`),
---       `get(key)` might return a value even if `has(key)` returns `false`.
----@field has fun(key: string):boolean
--- * `write()`: returns a boolean (`true` for success)
---     * Writes changes to file.
----@field write fun():boolean
--- * `to_table()`: returns `{[key1]=value1,...}`
----@field to_table fun():table
