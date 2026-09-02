@@ -867,6 +867,15 @@ function core.show_death_screen(player, reason) end
 ---@return string
 function core.inventorycube(img1, img2, img3) end
 
+---See `core.item_eat` and `core.register_on_item_eat`
+---@param hp_change integer
+---@param replace_with_item string|nil
+---@param itemstack ItemStack
+---@param user ObjectRef
+---@param pointed_thing PointedThing
+---@return ItemStack? leftover Returns leftover ItemStack or nil to indicate no inventory change
+function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed_thing) end
+
 -- * `core.get_pointed_thing_position(pointed_thing, above)`
 --     * Returns the position of a `pointed_thing` or `nil` if the `pointed_thing`
 --       does not refer to a node or entity.
