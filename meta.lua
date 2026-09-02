@@ -58,12 +58,20 @@ function core.get_mod_storage() end
 --   `on_construct`).
 ---@field mark_as_private fun(fields: string|string[])
 
+---@class Settings
+---@field get fun(key: string): string?
+---@field get_bool fun(key: string, fundefault?: boolean): boolean
+---@field get_flags fun(key: string): table<string, boolean>
+---@field get_names fun(): string[]
+---@field get_np_group fun(key: string): NoiseParams
+---@field get_pos fun(key: string): vector?
+---@field has fun(key: string): boolean
+---@field remove fun(key: string): boolean
+---@field set fun(key: string, value: string)
+---@field set_bool fun(key: string, value: boolean)
+
 ---@type Settings
 core.settings = core.settings
-
----@param filename string
----@return Settings
-function Settings(filename) end
 
 -- ### Format
 --

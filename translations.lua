@@ -2,43 +2,25 @@
 
 ---@alias textdomain string
 
---[[
-`core.get_translator(textdomain)` is a simple wrapper around
-`core.translate` and `core.translate_n`.  
-After `local S, PS = core.get_translator(textdomain)`, we have
-`S(str, ...)` equivalent to `core.translate(textdomain, str, ...)`, and
-`PS(str, str_plural, n, ...)` to `core.translate_n(textdomain, str, str_plural, n, ...)`.  
-It is intended to be used in the following way, so that it avoids verbose
-repetitions of `core.translate`:
+---@alias Translator fun(str: string, ...: string): string
+---@alias PluralTranslator fun(
+---    str: string,
+---    str_plural: string,
+---    n: number,
+---    ...: string
+---): string
 
-```lua
-local S, PS = core.get_translator(textdomain)
-S(str, ...)
-```
-
-As an extra commodity, if `textdomain` is nil, it is assumed to be "" instead.
-]]
 ---@nodiscard
 ---@param textdomain textdomain|nil
----@return fun(str:string, ...:string):string S, fun(str:string, str_plural:string, n:number, ...:string):string PS
+---@return Translator S
+---@return PluralTranslator PS
 function core.get_translator(textdomain) end
 
---[[
-* `core.translate(textdomain, str, ...)` translates the string `str` with
-  the given `textdomain` for disambiguation. The textdomain must match the
-  textdomain specified in the translation file in order to get the string
-  translated. This can be used so that a string is translated differently in
-  different contexts.
-  It is advised to use the name of the mod as textdomain whenever possible, to
-  avoid clashes with other mods.
-  This function must be given a number of arguments equal to the number of
-  arguments the translated string expects.
-  Arguments are literal strings -- they will not be translated.
-]]
 ---@nodiscard
 ---@param textdomain textdomain
 ---@param str string
 ---@param ... string
+---@return string
 function core.translate(textdomain, str, ...) end
 
 --[[
