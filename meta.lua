@@ -22,24 +22,32 @@
 ---@class MetaDataRef
 -- * `contains(key)`: Returns true if key present, otherwise false.
 --     * Returns `nil` when the MetaData is inexistent.
----@field contains fun(key:string):boolean?
+---@field contains fun(self: MetaDataRef, key:string):boolean?
 -- * `get(key)`: Returns `nil` if key not present, else the stored string.
----@field get fun(key:string):string?
+---@field get fun(self: MetaDataRef, key:string):string?
 -- * `set_string(key, value)`: Value of `""` will delete the key.
----@field set_string fun(key:string, value:string)
+---@field set_string fun(self: MetaDataRef, key:string, value:string)
+-- * `get_string(key)`: Returns `""` if key not present.
+---@field get_string fun(self: MetaDataRef, key:string):string
 -- * `set_int(key, value)`
 --     * The range for the value is system-dependent (usually 32 bits).
 --       The value will be converted into a string when stored.
----@field set_int fun(key:string, value:integer)
+---@field set_int fun(self: MetaDataRef, key:string, value:integer)
 -- * `get_int(key)`: Returns `0` if key not present.
----@field get_int fun(key:string):integer
+---@field get_int fun(self: MetaDataRef, key:string):integer
 -- * `set_float(key, value)`
 --     * Store a number (a 64-bit float) exactly.
 --     * The value will be converted into a string when stored.
----@field set_float fun(key:string, value:number)
----@field get_float fun(key:string):number
----@field get_keys fun():string[]
----@field to_table fun():{fields:table<string, string>, inventory?:InvTable}?
+---@field set_float fun(self: MetaDataRef, key:string, value:number)
+---@field get_float fun(self: MetaDataRef, key:string):number
+---@field get_keys fun(self: MetaDataRef):string[]
+---@field to_table fun(self: MetaDataRef):{fields:table<string, string>, inventory?:InvTable}?
+-- * `from_table(data)`: Replaces all metadata with `data` (a metadata table).
+--     * A non-table `data` clears all metadata. Returns `true` on success.
+---@field from_table fun(self: MetaDataRef, data: {fields:table<string, string>, inventory?:InvTable}?):boolean
+-- * `equals(other)`: Returns `true` if this metadata has the same key-value pairs as `other`.
+---@field equals fun(self: MetaDataRef, other: MetaDataRef):boolean
+---@class PlayerMetaRef: MetaDataRef
 
 -- * `core.get_mod_storage()`:
 --     * returns reference to mod private `StorageRef`
