@@ -92,6 +92,12 @@ function core.chat_send_all(text) end
 ---@return nil
 function core.chat_send_player(name, text) end
 
+---@param player_or_name ObjectRef|string
+---@param ... string|table<string, boolean>
+---@return boolean, table<string, boolean> missing_privs
+function core.check_player_privs(player_or_name, ...)
+end
+
 -- * `core.format_chat_message(name, message)`
 --     * Used by the server to format a chat message, based on the setting `chat_message_format`.
 --       Refer to the documentation of the setting for a list of valid placeholders.
