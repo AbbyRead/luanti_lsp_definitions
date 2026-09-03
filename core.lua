@@ -18,9 +18,15 @@ Named colors are also supported and are equivalent to
 To specify the value of the alpha channel, append `#A` or `#AA` to the end of
 the color name (e.g. `colorname#08`).
 ]]
--- Unofficial note: sorry they need to be aliases
+---@class ColorSpecTable
+---@field r integer Red component (0..255)
+---@field g integer Green component (0..255)
+---@field b integer Blue component (0..255)
+---@field a integer|nil Alpha component (0..255, defaults to 255)
+
 ---@alias ColorString string
----@alias ColorSpec table|number|integer|string
+
+---@alias ColorSpec ColorSpecTable|integer|ColorString
 
 ---@class content_id: integer
 
