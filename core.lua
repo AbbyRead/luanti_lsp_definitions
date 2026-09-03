@@ -108,12 +108,15 @@ end
 ---@param message string
 ---@return nil
 function core.format_chat_message(name, message) end
-
----@class SimpleSoundSpec
----@field name string
+---@class SimpleSoundSpecDef
+---@field name string?
 ---@field gain number?
 ---@field pitch number?
 ---@field fade number?
+
+--- Sound name, gain, pitch, and fade. Either a string (sound name only)
+--- or a table. `""` or `{}` means no sound.
+---@alias SimpleSoundSpec string | SimpleSoundSpecDef
 
 ---@class sound_params
 ---@field gain number?
@@ -129,42 +132,35 @@ function core.format_chat_message(name, message) end
 
 ---@class sound_handle
 
---- Unofficial note: i made ephemeral NOT be optional because it's a good idea to explicitely set it (most of the time you don't use that, so set it to true)
--- * `core.sound_play(spec, parameters, [ephemeral])`: returns a handle
---     * `spec` is a `SimpleSoundSpec`
---     * `parameters` is a sound parameter table
---     * `ephemeral` is a boolean (default: false)
---       Ephemeral sounds will not return a handle and can't be stopped or faded.
---       It is recommend to use this for short sounds that happen in response to
---       player actions (e.g. door closing).
+--- Unofficial note: ephemeral is NOT optional here, unlike the engine's
+--- signature.  It's worth setting explicitly, since it's true most of the time.
+---
+--- Plays a sound.
+--- - `spec`: a `SimpleSoundSpec`
+--- - `parameters`: a sound parameter table
+--- - `ephemeral`: default `false`. Ephemeral sounds don't return a handle
+---   and can't be stopped or faded; recommended for short sounds tied to
+---   player actions (e.g. a door closing).
 ---@param spec SimpleSoundSpec
 ---@param parameters sound_params
 ---@param ephemeral boolean
 ---@return sound_handle?
 function core.sound_play(spec, parameters, ephemeral) end
 
--- * `core.sound_stop(handle)`
---     * `handle` is a handle returned by `core.sound_play`
+--- Stops a sound started by `core.sound_play`.
 ---@param handle sound_handle
 function core.sound_stop(handle) end
--- * `core.sound_fade(handle, step, gain)`
---     * `handle` is a handle returned by `core.sound_play`
---     * `step` determines how fast a sound will fade.
---       The gain will change by this much per second,
---       until it reaches the target gain.
---       Note: Older versions used a signed step. This is deprecated, but old
---       code will still work. (the client uses abs(step) to correct it)
---     * `gain` the target gain for the fade.
---       Fading to zero will delete the sound.
+
+--- Fades a sound toward `gain` by `step` per second.
+--- Fading to zero deletes the sound. Older engine versions used a signed
+--- `step`; still supported since the client applies `abs(step)`.
 ---@param handle sound_handle
 ---@param step number
 ---@param gain number
 function core.sound_fade(handle, step, gain) end
 
 ---@class job
--- * `job:cancel()`
---     * Cancels the job function from being called
----@field cancel fun()
+---@field cancel fun(self: job) Cancels the job function from being called.
 
 -- * `core.after(time, func, ...)`: returns job table to use as below.
 --     * Call the function `func` after `time` seconds, may be fractional
