@@ -986,8 +986,10 @@ function core.get_node_drops(node, toolname, tool, digger, pos) end
 --       placed in `decremented_input.items`. Replacements can be placed in
 --       `decremented_input` if the stack of the replaced item has a count of 1.
 --     * `decremented_input` = like `input`
----@param input {method: "normal"|"cooking"|"fuel", width:number, items:InvList}
----@return {item: ItemStack, time:number?, replacements: InvList}?,ItemStack?
+---@alias CraftInput {method: "normal"|"cooking"|"fuel", width: number, items: InvList}
+---@alias CraftOutput {item: ItemStack, time: number?, replacements: InvList}
+---@param input CraftInput
+---@return CraftOutput?, CraftInput? -- output, decremented_input
 function core.get_craft_result(input) end
 
 -- * `core.get_craft_recipe(output)`: returns input
