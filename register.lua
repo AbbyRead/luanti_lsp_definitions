@@ -637,6 +637,7 @@ function core.register_abm(abmdef) end
 -- Shall return the leftover itemstack or nil to not modify the item (tool).
 -- The user may be any ObjectRef or nil.
 ---@field after_use? fun(itemstack:ItemStack, user:ObjectRef?, node:MapNode, digparams:table):ItemStack?
+---@field type? "node"|"craft"|"tool"
 
 ---@class NodeDef: ItemDef
 -- drawtype = "normal",  -- See "Node drawtypes"
