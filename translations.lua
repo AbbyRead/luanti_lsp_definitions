@@ -37,3 +37,13 @@ function core.translate(textdomain, str, ...) end
 ---@param ... string|number
 ---@return string
 function core.translate_n(textdomain, str, str_plural, n, ...) end
+
+---Server side translation utility. Resolves translation markup on the server
+---for the given `lang_code`, using the corresponding translation files.
+---Useful for sorting/filtering translated strings;
+---not so much for client display.
+---@nodiscard
+---@param lang_code string
+---@param string string
+---@return string
+function core.get_translated_string(lang_code, string) end
