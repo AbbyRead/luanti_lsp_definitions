@@ -1,6 +1,6 @@
 ---@meta
 ---
----You know, InvRefs ItemStacks things like thatt
+---You know, InvRefs ItemStacks things like that
 
 ---@class inventory_location
 ---@field type "node"|"player"|"detached"
@@ -21,14 +21,14 @@
 ---@field get_width fun(self,listname:string):integer
 -- * `set_width(listname, width)`: set width of list; currently used for crafting
 --     * returns `false` on error (e.g. invalid `listname` or `width`)
----@field set_width fun(self,listname:string, width:integer)
+---@field set_width fun(self,listname:string, width:integer):boolean
 -- * `get_stack(listname, i)`: get a copy of stack index `i` in list
----@field get_stack fun(self,listname:string, i:integer)
+---@field get_stack fun(self,listname:string, i:integer):ItemStack
 -- * `set_stack(listname, i, stack)`: copy `stack` to index `i` in list
 ---@field set_stack fun(self,listname:string, i:integer, stack:ItemStackAny)
 -- * `get_list(listname)`: returns full list (list of `ItemStack`s)
 --                         or `nil` if list doesn't exist (size 0)
----@field get_list fun(self,listname:string):InvList
+---@field get_list fun(self,listname:string):InvList?
 -- * `set_list(listname, list)`: set full list (size will not change)
 ---@field set_list fun(self,listname:string, list:InvList)
 -- * `get_lists()`: returns table that maps listnames to inventory lists
@@ -37,7 +37,7 @@
 ---@field set_lists fun(self,lists:table<string, InvList>)
 -- * `add_item(listname, stack)`: add item somewhere in list, returns leftover
 --   `ItemStack`.
----@field add_item fun(self,listname:string, stack:ItemStackAny)
+---@field add_item fun(self,listname:string, stack:ItemStackAny):ItemStack
 -- * `room_for_item(listname, stack):` returns `true` if the stack of items
 --   can be fully added to the list
 ---@field room_for_item fun(self,listname:string, stack:ItemStackAny):boolean
@@ -46,14 +46,14 @@
 --     * If `match_meta` is `true`, item metadata is also considered when comparing
 --       items. Otherwise, only the items names are compared. Default: `false`
 --     * The method ignores wear.
----@field contains_item fun(self,listname:string, stack:ItemStackAny, match_meta:boolean?)
+---@field contains_item fun(self,listname:string, stack:ItemStackAny, match_meta:boolean?):boolean
 -- * `remove_item(listname, stack, [match_meta])`: take as many items as specified from the
 --   list, returns the items that were actually removed (as an `ItemStack`).
 --     * If `match_meta` is `true` (available since feature `remove_item_match_meta`),
 --       item metadata is also considered when comparing items. Otherwise, only the
 --       items names are compared. Default: `false`
 --     * The method ignores wear.
----@field remove_item fun(self,listname:string, stack:ItemStackAny, match_meta: boolean?)
+---@field remove_item fun(self,listname:string, stack:ItemStackAny, match_meta: boolean?):ItemStack
 -- * `get_location()`: returns a location compatible to
 --   `core.get_inventory(location)`.
 --     * returns `{type="undefined"}` in case location is not known
@@ -106,7 +106,7 @@
 --         * `short_description` in item definition
 --         * first line of the description (From item meta or def, see `get_description()`.)
 --         * Returns nil if none of the above are set
----@field get_short_description fun(self,):string
+---@field get_short_description fun(self,):string?
 -- * `clear()`: removes all items from the stack, making it empty.
 ---@field clear fun(self,)
 -- * `replace(item)`: replace the contents of this stack.
@@ -144,7 +144,7 @@
 ---@field get_wear_bar_params fun(self,):wear_bar_params?
 -- * `add_item(item)`: returns leftover `ItemStack`
 --     * Put some item or stack onto this stack
----@field add_item fun(self,item:ItemStackAny)
+---@field add_item fun(self,item:ItemStackAny):ItemStack
 -- * `item_fits(item)`: returns `true` if item or stack can be fully added to
 --   this one.
 ---@field item_fits fun(self,item:ItemStackAny):boolean
@@ -166,10 +166,10 @@
 ---@field equals fun(self,other:any):boolean
 
 ---@class detached_inventory_callbacks
----@field allow_move fun(inv:InvRef, from_list:InvList, from_index:number, to_list:InvList, to_index:number, count:number, player:PlayerRef)?
----@field allow_put fun(inv:InvRef, listname:string, index:number, stack:ItemStack, player:PlayerRef)?
----@field allow_take fun(inv:InvRef, listname:string, index:number, stack:ItemStack, player:PlayerRef)?
----@field on_move fun(inv:InvRef, from_list:InvList, from_index:number, to_list:InvList, to_index:number, count:number, player:PlayerRef)?
+---@field allow_move fun(inv:InvRef, from_list:string, from_index:number, to_list:string, to_index:number, count:number, player:PlayerRef):integer?
+---@field allow_put fun(inv:InvRef, listname:string, index:number, stack:ItemStack, player:PlayerRef):integer?
+---@field allow_take fun(inv:InvRef, listname:string, index:number, stack:ItemStack, player:PlayerRef):integer?
+---@field on_move fun(inv:InvRef, from_list:string, from_index:number, to_list:string, to_index:number, count:number, player:PlayerRef)?
 ---@field on_put fun(inv:InvRef, listname:string, index:number, stack:ItemStack, player:PlayerRef)?
 ---@field on_take fun(inv:InvRef, listname:string, index:number, stack:ItemStack, player:PlayerRef)?
 
@@ -181,11 +181,11 @@
 --     * `{type="detached", name="creative"}`
 ---@param location inventory_location
 ---@return InvRef
-function core.get_inventory_location(location) end
+function core.get_inventory(location) end
 
 ---@nodiscard
 ---@param name string
----@param callbacks nil
+---@param callbacks detached_inventory_callbacks?
 ---@param player_name string?
 ---@return InvRef
 function core.create_detached_inventory(name, callbacks, player_name) end
