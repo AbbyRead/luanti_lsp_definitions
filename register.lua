@@ -491,6 +491,9 @@ function core.register_abm(abmdef) end
 ---@alias TouchInteractionMode "long_dig_short_place"|"short_dig_long_place"|"user"
 
 ---@class ItemDef
+-- Set by the engine to the registration name; not part of the table
+-- passed to core.register_node/craftitem/tool.
+---@field name string
 -- Can contain new lines. "\n" has to be used as new line character.
 -- See also: `get_description` in [`ItemStack`]
 ---@field description string
