@@ -499,19 +499,19 @@ function core.register_abm(abmdef) end
 -- Use an [`ItemStack`] to get the short description, e.g.:
 --   ItemStack(itemname):get_short_description()
 ---@field short_description? string
--- key = name, value = rating; rating = <number>.
+-- key = name, value = rating; rating = <integer>.
 -- If rating not applicable, use 1.
 -- e.g. {wool = 1, fluffy = 3}
 --      {soil = 2, outerspace = 1, crumbly = 1}
 --      {bendy = 2, snappy = 1},
 --      {hard = 1, metal = 1, spikes = 1}
 ---@field groups table<string, integer>
--- Texture shown in the inventory GUI
+-- Image shown in the inventory GUI
 -- Defaults to a 3D rendering of the node if left empty.
 ---@field inventory_image? string
--- An overlay texture which is not affected by colorization
+-- An overlay image which is not affected by colorization
 ---@field inventory_overlay? string
--- Texture shown when item is held in hand
+-- Image shown when item is held in hand
 -- Defaults to a 3D rendering of the node if left empty.
 ---@field wield_image? string
 -- Like inventory_overlay but only used in the same situation as wield_image
@@ -527,7 +527,8 @@ function core.register_abm(abmdef) end
 -- Color the item is colorized with. The palette overrides this.
 ---@field color? ColorSpec
 -- Maximum amount of items that can be in a single stack.
--- The default can be changed by the setting `default_stack_max`
+-- The default can be changed by the setting `default_stack_max`.
+-- Range: [1, 65535]
 ---@field stack_max? integer
 -- Range of node and object pointing that is possible with this item held
 -- Can be overridden with itemstack meta.
@@ -564,8 +565,8 @@ function core.register_abm(abmdef) end
 -- on ground when the player places the item. Server will always update
 -- with actual result shortly.
 ---@field node_placement_prediction? string
--- if "", no prediction is made.
--- if "air", node is removed.
+-- If "", no prediction is made.
+-- If "air", node is removed.
 -- Otherwise should be name of node which the client immediately places
 -- upon digging. Server will always update with actual result shortly.
 ---@field node_dig_prediction? string
@@ -574,8 +575,8 @@ function core.register_abm(abmdef) end
 -- If specified as a table, the field to be used is selected according to
 -- the current `pointed_thing`.
 -- There are three possible TouchInteractionMode values:
--- * "long_dig_short_place" (long tap  = dig, short tap = place)
--- * "short_dig_long_place" (short tap = dig, long tap  = place)
+-- * "long_dig_short_place" (long tap = dig, short tap = place)
+-- * "short_dig_long_place" (short tap = dig, long tap = place)
 -- * "user":
 --   * For `pointed_object`: Equivalent to "short_dig_long_place" if the
 --     client-side setting "touch_punch_gesture" is "short_tap" (the
@@ -587,36 +588,39 @@ function core.register_abm(abmdef) end
 --   * The behavior of "user" may change in the future.
 -- The default value is "user".
 ---@field touch_interaction? TouchInteractionMode | {pointed_nothing:TouchInteractionMode, pointed_node:TouchInteractionMode, pointed_object: TouchInteractionMode}
----@field sound? {breaks:SimpleSoundSpec?, eat:SimpleSoundSpec?, punch_use:SimpleSoundSpec?, punch_use_dir:SimpleSoundSpec?}
+---@field sound? {breaks:SimpleSoundSpec?, eat:SimpleSoundSpec?, punch_use:SimpleSoundSpec?, punch_use_air:SimpleSoundSpec?}
 -- When the 'place' key was pressed with the item in hand
--- and a node was pointed at.
+-- and pointing at a node.
 -- Shall place item and return the leftover itemstack
 -- or nil to not modify the inventory.
 -- The placer may be any ObjectRef or nil.
 -- default: core.item_place
----@field on_place? fun(itemstack:ItemStack, placer:PlayerRef, pointed_thing:pointed_thing):ItemStack?
+---@field on_place? fun(itemstack:ItemStack, placer:ObjectRef?, pointed_thing:pointed_thing):ItemStack?
 -- Same as on_place but called when not pointing at a node.
 -- Function must return either nil if inventory shall not be modified,
 -- or an itemstack to replace the original itemstack.
 -- The user may be any ObjectRef or nil.
--- default: nil
----@field on_secondary_use? fun(itemstack:ItemStack, user:PlayerRef, pointed_thing:pointed_thing)
+-- default: core.item_secondary_use
+---@field on_secondary_use? fun(itemstack:ItemStack, user:ObjectRef?, pointed_thing:pointed_thing):ItemStack?
 -- Shall drop item and return the leftover itemstack.
 -- The dropper may be any ObjectRef or nil.
+-- Only the count of the returned itemstack is significant.
+-- It is not possible to modify the item, wear or metadata in a drop operation.
+-- The returned itemstack must not have a higher count than the input stack.
 -- default: core.item_drop
----@field on_drop? fun(itemstack:ItemStack, dropper:PlayerRef, pos:vector)
+---@field on_drop? fun(itemstack:ItemStack, dropper:ObjectRef?, pos:vector):ItemStack?
 -- Called when a dropped item is punched by a player.
 -- Shall pick-up the item and return the leftover itemstack or nil to not
 -- modify the dropped item.
 -- Parameters:
 -- * `itemstack`: The `ItemStack` to be picked up.
 -- * `picker`: Any `ObjectRef` or `nil`.
--- * `pointed_thing` (optional): The dropped item (a `"__builtin:item"`
---   luaentity) as `type="object"` `pointed_thing`.
--- * `time_from_last_punch, ...` (optional): Other parameters from
+-- * `pointed_thing` (optional): the dropped item (a `"__builtin:item"`
+--   luaentity) as a `pointed_thing` with `type="object"`.
+-- * `time_from_last_punch, ...` (optional): other parameters from
 --   `luaentity:on_punch`.
--- default: `core.item_pickup`
----@field on_pickup? fun(itemstack: ItemStack, picker:PlayerRef, pointed_thing:pointed_thing, time_from_last_punch: number, ...):ItemStack?
+-- default: core.item_pickup
+---@field on_pickup? fun(itemstack:ItemStack, picker: ObjectRef?, pointed_thing: pointed_thing?, time_from_last_punch:number?, ...):ItemStack?
 -- default: nil
 -- When user pressed the 'punch/mine' key with the item in hand.
 -- Function must return either nil if inventory shall not be modified,
@@ -624,18 +628,15 @@ function core.register_abm(abmdef) end
 -- e.g. itemstack:take_item(); return itemstack
 -- Otherwise, the function is free to do what it wants.
 -- The user may be any ObjectRef or nil.
--- The default functions handle regular use cases.
----@field on_use? fun(itemstack:ItemStack, user:PlayerRef?, pointed_thing:pointed_thing)
--- default: nil
--- If defined, should return an itemstack and will be called instead of
--- wearing out the item (if tool). If returnskk nil, does nothing.
--- If after_use doesn't exist, it is the same as:
---   function(itemstack, user, node, digparams)
---     itemstack:add_wear(digparams.wear)
---     return itemstack
---   end
+-- Note that defining this callback will prevent normal punching/digging
+-- behavior on the client, as the interaction is instead "forwarded" to
+-- the server.
+---@field on_use? fun(itemstack:ItemStack, user:ObjectRef?, pointed_thing:pointed_thing):ItemStack?
+-- Called after a tool is used to dig a node and will replace the default
+-- tool wear-out handling.
+-- Shall return the leftover itemstack or nil to not modify the item (tool).
 -- The user may be any ObjectRef or nil.
----@field after_use? fun(itemstack:ItemStack, user:PlayerRef?, node:MapNode, digparams:table)
+---@field after_use? fun(itemstack:ItemStack, user:ObjectRef?, node:MapNode, digparams:table):ItemStack?
 
 ---@class NodeDef: ItemDef
 -- drawtype = "normal",  -- See "Node drawtypes"
