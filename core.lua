@@ -632,7 +632,7 @@ function core.get_name_from_content_id(content_id) end
 ---@param string string
 ---@param nullvalue any?
 ---@param return_error boolean?
----@return boolean?|any, any?
+---@return boolean|any?, any?
 function core.parse_json(string, nullvalue, return_error) end
 -- * `core.write_json(data[, styled])`: returns a string or `nil` and an error
 --   message.
