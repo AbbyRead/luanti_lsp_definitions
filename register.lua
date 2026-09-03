@@ -641,6 +641,11 @@ function core.register_abm(abmdef) end
 -- The user may be any ObjectRef or nil.
 ---@field after_use? fun(itemstack:ItemStack, user:ObjectRef?, node:MapNode, digparams:table):ItemStack?
 ---@field type? "node"|"craft"|"tool"
+---I don't think mod_origin is unique to node definitions.  The documentation makes it
+---seem so, but builtin/game/register.lua just has this line in the core.register_item definition
+---without any qualification that it has to be nodes (see line 297 in that file):
+--- itemdef.mod_origin = core.get_current_modname() or "??"
+---@field mod_origin? string
 
 ---@class NodeDef: ItemDef
 -- drawtype = "normal",  -- See "Node drawtypes"
