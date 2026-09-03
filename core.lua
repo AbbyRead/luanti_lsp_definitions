@@ -143,7 +143,7 @@ function core.format_chat_message(name, message) end
 ---   player actions (e.g. a door closing).
 ---@param spec SimpleSoundSpec
 ---@param parameters sound_params
----@param ephemeral boolean
+---@param ephemeral? boolean
 ---@return sound_handle?
 function core.sound_play(spec, parameters, ephemeral) end
 
