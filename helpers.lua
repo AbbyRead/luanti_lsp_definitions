@@ -43,6 +43,10 @@ function math.round(x) end
 ---@return string[]
 function string.split(str, separator, include_empty, max_splits, sep_is_pattern) end
 
+---@param self string
+---@return string
+function string.trim(self) end
+
 ---@param str string
 ---@param limit integer
 ---@param as_table boolean?
