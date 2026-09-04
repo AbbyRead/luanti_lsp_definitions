@@ -166,12 +166,12 @@
 ---@field equals fun(self,other:any):boolean
 
 ---@class detached_inventory_callbacks
----@field allow_move fun(inv:InvRef, from_list:string, from_index:number, to_list:string, to_index:number, count:number, player:PlayerRef):integer?
----@field allow_put fun(inv:InvRef, listname:string, index:number, stack:ItemStack, player:PlayerRef):integer?
----@field allow_take fun(inv:InvRef, listname:string, index:number, stack:ItemStack, player:PlayerRef):integer?
----@field on_move fun(inv:InvRef, from_list:string, from_index:number, to_list:string, to_index:number, count:number, player:PlayerRef)?
----@field on_put fun(inv:InvRef, listname:string, index:number, stack:ItemStack, player:PlayerRef)?
----@field on_take fun(inv:InvRef, listname:string, index:number, stack:ItemStack, player:PlayerRef)?
+---@field allow_move? fun(inv:InvRef, from_list:string, from_index:number, to_list:string, to_index:number, count:number, player:PlayerRef):integer?
+---@field allow_put? fun(inv:InvRef, listname:string, index:number, stack:ItemStack, player:PlayerRef):integer?
+---@field allow_take? fun(inv:InvRef, listname:string, index:number, stack:ItemStack, player:PlayerRef):integer?
+---@field on_move? fun(inv:InvRef, from_list:string, from_index:number, to_list:string, to_index:number, count:number, player:PlayerRef)?
+---@field on_put? fun(inv:InvRef, listname:string, index:number, stack:ItemStack, player:PlayerRef)?
+---@field on_take? fun(inv:InvRef, listname:string, index:number, stack:ItemStack, player:PlayerRef)?
 
 -- `core.get_inventory(location)`: returns an `InvRef`
 --
