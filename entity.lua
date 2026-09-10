@@ -1149,5 +1149,5 @@
 ---@field on_attach_child? fun(self, child:ObjectRef)
 ---@field on_detach_child? fun(self, child:ObjectRef)
 ---@field on_detach? fun(self, parent:ObjectRef)
----@field get_staticdata? fun(self)
+---@field get_staticdata? fun(self):string
 ---@field initial_properties ObjectProps
