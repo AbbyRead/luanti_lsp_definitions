@@ -108,7 +108,7 @@
 ---@field visual? "cube"|"sprite"|"upright_sprite"|"mesh"|"wielditem"|"item"|"node"
 -- Multipliers for the visual size. If `z` is not specified, `x` will be used
 -- to scale the entity along both horizontal axes.
----@field visual_size? vector
+---@field visual_size? vector | { x: number, y: number }
 -- File name of mesh when using "mesh" visual.
 -- For legacy reasons, this uses a 10x scale for meshes: 10 units = 1 node.
 ---@field mesh? string
